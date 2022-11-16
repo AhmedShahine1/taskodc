@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ODCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="IdAdmin" />
+          </Key>
+          <Property Name="IdAdmin" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Catagory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Icon" Type="image" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="idCourse" />
+          </Key>
+          <Property Name="idCourse" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameCourse" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nameConstractor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" Nullable="false" />
+          <Property Name="idCatagory" Type="int" />
+        </EntityType>
+        <EntityType Name="courseContent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="varchar(max)" Nullable="false" />
+          <Property Name="idCourse" Type="int" />
+          <Property Name="Quiz" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="idSkill" />
+          </Key>
+          <Property Name="idSkill" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameSkill" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="degreeQuiz" Type="int" Nullable="false" />
+          <Property Name="idCourseSkill" Type="int" Nullable="false" />
+          <Property Name="idUserSkill" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userCourse">
+          <Key>
+            <PropertyRef Name="idUserCourse" />
+          </Key>
+          <Property Name="idUserCourse" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idUser" Type="int" Nullable="false" />
+          <Property Name="idCourses" Type="int" Nullable="false" />
+          <Property Name="Quiz" Type="int" Nullable="false" />
+          <Property Name="yourProgress" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="idCatagory">
+          <End Role="Catagory" Type="Self.Catagory" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catagory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="idCatagory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourse">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="courseContent" Type="Self.courseContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="courseContent">
+              <PropertyRef Name="idCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourses">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="userCourse" Type="Self.userCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="userCourse">
+              <PropertyRef Name="idCourses" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourseSkill">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="idCourseSkill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idUser">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="userCourse" Type="Self.userCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userCourse">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idUserSkill">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="idUserSkill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ODCModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Catagory" EntityType="Self.Catagory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="courseContent" EntityType="Self.courseContent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userCourse" EntityType="Self.userCourse" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="idCatagory" Association="Self.idCatagory">
+            <End Role="Catagory" EntitySet="Catagory" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="idCourse" Association="Self.idCourse">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="courseContent" EntitySet="courseContent" />
+          </AssociationSet>
+          <AssociationSet Name="idCourses" Association="Self.idCourses">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="userCourse" EntitySet="userCourse" />
+          </AssociationSet>
+          <AssociationSet Name="idCourseSkill" Association="Self.idCourseSkill">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="Skill" EntitySet="Skill" />
+          </AssociationSet>
+          <AssociationSet Name="idUser" Association="Self.idUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="userCourse" EntitySet="userCourse" />
+          </AssociationSet>
+          <AssociationSet Name="idUserSkill" Association="Self.idUserSkill">
+            <End Role="User" EntitySet="User" />
+            <End Role="Skill" EntitySet="Skill" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ODCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="IdAdmin" />
+          </Key>
+          <Property Name="IdAdmin" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Catagory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Icon" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.idCatagory" FromRole="Catagory" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="idCourse" />
+          </Key>
+          <Property Name="idCourse" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameCourse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nameConstractor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idCatagory" Type="Int32" />
+          <NavigationProperty Name="Catagory" Relationship="Self.idCatagory" FromRole="Course" ToRole="Catagory" />
+          <NavigationProperty Name="courseContents" Relationship="Self.idCourse" FromRole="Course" ToRole="courseContent" />
+          <NavigationProperty Name="userCourses" Relationship="Self.idCourses" FromRole="Course" ToRole="userCourse" />
+          <NavigationProperty Name="Skills" Relationship="Self.idCourseSkill" FromRole="Course" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="courseContent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idCourse" Type="Int32" />
+          <Property Name="Quiz" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.idCourse" FromRole="courseContent" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="idSkill" />
+          </Key>
+          <Property Name="idSkill" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameSkill" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="degreeQuiz" Type="Int32" Nullable="false" />
+          <Property Name="idCourseSkill" Type="Int32" Nullable="false" />
+          <Property Name="idUserSkill" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.idCourseSkill" FromRole="Skill" ToRole="Course" />
+          <NavigationProperty Name="User" Relationship="Self.idUserSkill" FromRole="Skill" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Skills" Relationship="Self.idUserSkill" FromRole="User" ToRole="Skill" />
+          <NavigationProperty Name="userCourses" Relationship="Self.idUser" FromRole="User" ToRole="userCourse" />
+        </EntityType>
+        <EntityType Name="userCourse">
+          <Key>
+            <PropertyRef Name="idUserCourse" />
+          </Key>
+          <Property Name="idUserCourse" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idUser" Type="Int32" Nullable="false" />
+          <Property Name="idCourses" Type="Int32" Nullable="false" />
+          <Property Name="Quiz" Type="Int32" Nullable="false" />
+          <Property Name="yourProgress" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.idCourses" FromRole="userCourse" ToRole="Course" />
+          <NavigationProperty Name="User" Relationship="Self.idUser" FromRole="userCourse" ToRole="User" />
+        </EntityType>
+        <Association Name="idCatagory">
+          <End Role="Catagory" Type="Self.Catagory" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catagory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="idCatagory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourse">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="courseContent" Type="Self.courseContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="courseContent">
+              <PropertyRef Name="idCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourses">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="userCourse" Type="Self.userCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="userCourse">
+              <PropertyRef Name="idCourses" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idCourseSkill">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="idCourse" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="idCourseSkill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idUserSkill">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Skill">
+              <PropertyRef Name="idUserSkill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="idUser">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="userCourse" Type="Self.userCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="userCourse">
+              <PropertyRef Name="idUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ODCEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="Catagories" EntityType="Self.Catagory" />
+          <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="courseContents" EntityType="Self.courseContent" />
+          <EntitySet Name="Skills" EntityType="Self.Skill" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="userCourses" EntityType="Self.userCourse" />
+          <AssociationSet Name="idCatagory" Association="Self.idCatagory">
+            <End Role="Catagory" EntitySet="Catagories" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="idCourse" Association="Self.idCourse">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="courseContent" EntitySet="courseContents" />
+          </AssociationSet>
+          <AssociationSet Name="idCourses" Association="Self.idCourses">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="userCourse" EntitySet="userCourses" />
+          </AssociationSet>
+          <AssociationSet Name="idCourseSkill" Association="Self.idCourseSkill">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Skill" EntitySet="Skills" />
+          </AssociationSet>
+          <AssociationSet Name="idUserSkill" Association="Self.idUserSkill">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Skill" EntitySet="Skills" />
+          </AssociationSet>
+          <AssociationSet Name="idUser" Association="Self.idUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="userCourse" EntitySet="userCourses" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ODCModelStoreContainer" CdmEntityContainer="ODCEntities1">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="ODCModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="IdAdmin" ColumnName="IdAdmin" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Catagories">
+            <EntityTypeMapping TypeName="ODCModel.Catagory">
+              <MappingFragment StoreEntitySet="Catagory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="ODCModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="idCourse" ColumnName="idCourse" />
+                <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+                <ScalarProperty Name="nameConstractor" ColumnName="nameConstractor" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="idCatagory" ColumnName="idCatagory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courseContents">
+            <EntityTypeMapping TypeName="ODCModel.courseContent">
+              <MappingFragment StoreEntitySet="courseContent">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="idCourse" ColumnName="idCourse" />
+                <ScalarProperty Name="Quiz" ColumnName="Quiz" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skills">
+            <EntityTypeMapping TypeName="ODCModel.Skill">
+              <MappingFragment StoreEntitySet="Skill">
+                <ScalarProperty Name="idSkill" ColumnName="idSkill" />
+                <ScalarProperty Name="nameSkill" ColumnName="nameSkill" />
+                <ScalarProperty Name="degreeQuiz" ColumnName="degreeQuiz" />
+                <ScalarProperty Name="idCourseSkill" ColumnName="idCourseSkill" />
+                <ScalarProperty Name="idUserSkill" ColumnName="idUserSkill" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ODCModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userCourses">
+            <EntityTypeMapping TypeName="ODCModel.userCourse">
+              <MappingFragment StoreEntitySet="userCourse">
+                <ScalarProperty Name="idUserCourse" ColumnName="idUserCourse" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="idCourses" ColumnName="idCourses" />
+                <ScalarProperty Name="Quiz" ColumnName="Quiz" />
+                <ScalarProperty Name="yourProgress" ColumnName="yourProgress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
